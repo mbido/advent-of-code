@@ -5,7 +5,7 @@ data = get_input(2015, 4)
 def helper(data, prefix)
   i = 0
   while true
-    if Digest::MD5.hexdigest("#{data}#{i}").starts_with?(prefix)
+    if md5("#{data}#{i}").starts_with?(prefix)
       return i
     end
     i += 1
