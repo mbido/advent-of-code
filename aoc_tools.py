@@ -1,12 +1,16 @@
 import requests
 import os
+from dotenv import load_dotenv
 
 #===============================================================================
 # Functions to retrieve input data and submit answers
 #===============================================================================
 
+load_dotenv()
+WORKING_DIR = os.getenv('WORKING_DIR')
+
 def get_cookie():
-    cookie_file = 'session_cookie.txt'
+    cookie_file = f'{WORKING_DIR}/session_cookie.txt'
     if os.path.exists(cookie_file):
         with open(cookie_file) as f:
             return f.read().strip()
@@ -17,7 +21,7 @@ def get_cookie():
         return cookie
 
 def get_input(year, day):
-    filename = f"aoc_{year}/data/day_{day:02}.txt"
+    filename = f"{WORKING_DIR}/aoc_{year}/data/day_{day:02}.txt"
     if os.path.exists(filename):
         with open(filename, 'r') as file:
             return file.read()
@@ -46,9 +50,13 @@ def submit_answer(year, day, answer, level=1, send=True):
 
 def setup_aoc_year(year):
     # Création du répertoire racine pour l'année
-    root_dir = os.path.join(os.getcwd(), f"aoc_{year}")
+    root_dir = os.path.join(os.getcwd(), f"{WORKING_DIR}/aoc_{year}")
     src_dir = os.path.join(root_dir, "src")
     data_dir = os.path.join(root_dir, "data")
+    
+    if os.path.exists(root_dir):
+        print(f"Directory for aoc {year} already exists. Exiting.")
+        return
     
     # Créer les répertoires s'ils n'existent pas
     os.makedirs(src_dir, exist_ok=True)
@@ -87,6 +95,14 @@ if __name__ == "__main__":
 
     print(f"Advent of Code {year} setup complete in {root_dir}")
 
+def create_env_if_not_exists():
+    current_abs_path = os.path.abspath(__file__)
+    if not os.path.exists('.env'):
+        with open('.env', 'w') as f:
+            f.write(f'WORKING_DIR={os.path.dirname(current_abs_path)}\n')
+        print(".env file created")
+
 if __name__ == "__main__":
-    year = input("Veuillez entrer l'année pour l'Advent of Code: ")
+    create_env_if_not_exists()
+    year = input("Enter the year for Advent of Code: ")
     setup_aoc_year(year)
