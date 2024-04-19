@@ -74,16 +74,11 @@ from utils import *
 YEAR = {year}
 DAY = {day}
 
-
-
-
 def part_1(data):
     return ""
 
 def part_2(data):
     return ""
-
-
 
 if __name__ == "__main__": 
     data = aoct.get_input(YEAR, DAY)
