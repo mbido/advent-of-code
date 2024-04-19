@@ -20,9 +20,7 @@ def part_1(data):
 def part_2(data):
     counter = 0
     for line in data.split("\n"):
-        nbOfCouple = len([1 for i in range(len(line) - 1) if line[i] + line[i + 1] in line[i + 2::]])
-        nbOfSeparatedByOne = len([1 for i in range(len(line) - 2) if line[i] == line[i + 2]])
-        if nbOfCouple > 0 and nbOfSeparatedByOne > 0:
+        if re.search(r'(..).*\1', line) and re.search(r'(.).\1', line):
             counter += 1
     return counter
 
