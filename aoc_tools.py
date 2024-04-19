@@ -2,10 +2,6 @@ import requests
 import os
 from dotenv import load_dotenv
 
-#===============================================================================
-# Functions to retrieve input data and submit answers
-#===============================================================================
-
 load_dotenv()
 WORKING_DIR = os.getenv('WORKING_DIR')
 
@@ -24,7 +20,8 @@ def get_input(year, day):
     filename = f"{WORKING_DIR}/aoc_{year}/data/day_{day:02}.txt"
     if os.path.exists(filename):
         with open(filename, 'r') as file:
-            return file.read()
+            input = file.read()
+            return input[:-1:] if input[-1] == "\n" else input
     else:
         url = f"https://adventofcode.com/{year}/day/{day}/input"
         session_cookie = get_cookie()
@@ -32,7 +29,7 @@ def get_input(year, day):
         response = requests.get(url, cookies=cookies)
         with open(filename, 'w') as file:
             file.write(response.text)
-        return response.text
+        return response.text[:-1:] if response.text[-1] == "\n" else response.text
 
 def submit_answer(year, day, answer, level=1, send=True):
     if not send:
@@ -41,7 +38,7 @@ def submit_answer(year, day, answer, level=1, send=True):
     session_cookie = get_cookie()
     url = f"https://adventofcode.com/{year}/day/{day}/answer"
     data = {
-        'level': level,  # 1 pour la première partie, 2 pour la deuxième partie
+        'level': level,  # 1 for the first part, 2 for the second 
         'answer': answer,
     }
     cookies = {'session': session_cookie}
@@ -72,6 +69,7 @@ def setup_aoc_year(year):
 import sys
 sys.path.append(os.path.abspath(os.path.join(__file__, '..', '..', '..')))
 import aoc_tools as aoct
+from utils import *
 
 YEAR = {year}
 DAY = {day}
