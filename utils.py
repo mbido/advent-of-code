@@ -3,6 +3,7 @@ import re
 import numpy as np
 from itertools import product, permutations
 import igraph as ig
+import json
 
 def md5(s):
     return hashlib.md5(s.encode('utf-8')).hexdigest()
