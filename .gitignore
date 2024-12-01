@@ -1,3 +1,5 @@
 *.txt
 __pycache__
 .env
+aoc-env
+.DS_Store
