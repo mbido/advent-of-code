@@ -4,6 +4,9 @@ import numpy as np
 from itertools import product, permutations
 import igraph as ig
 import json
+import math
+from functools import reduce
+
 
 def md5(s):
     return hashlib.md5(s.encode('utf-8')).hexdigest()
@@ -24,3 +27,12 @@ def get_path_weight(g : ig.Graph, vList):
             return -1
         weight += int(g.es[edge]["weight"])
     return weight
+
+def pgcd(values: list):
+    return reduce(math.gcd, values)
+
+def ppcm_pair(a: int, b:int):
+    return abs(a * b) // math.gcd(a, b)
+
+def ppcm(values: list):
+    return reduce(ppcm_pair, values)
