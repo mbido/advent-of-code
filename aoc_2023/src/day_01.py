@@ -80,15 +80,13 @@ def part_2(data):
                 break
             
             t = spelled(line[:i + 1], True)
-            print(line[:i + 1], t)
             if t:
                 b = t
                 break
-        print(a, b)
         res += a * 10 + b
     return res
 
 if __name__ == "__main__":
     data = aoct.get_input(YEAR, DAY)
     aoct.submit_answer(YEAR, DAY, part_1(data), send=False)
-    aoct.submit_answer(YEAR, DAY, part_2(data), level=2, send=False)
+    aoct.submit_answer(YEAR, DAY, part_2(data), level=2, send=False) 
