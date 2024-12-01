@@ -8,10 +8,19 @@ YEAR = 2021
 DAY = 1
 
 def part_1(data):
-    return ""
+    d = [int(elt) for elt in data.split("\n")]
+    return len([d[i] for i in range(1, len(d)) if d[i - 1] < d[i]])
 
 def part_2(data):
-    return ""
+    d = [int(elt) for elt in data.split("\n")]
+    prev = sum(d[:3])
+    res = 0
+    for i in range(1, len(d)-2):
+        current = sum(d[i:i+3])
+        if current > prev:
+            res += 1
+        prev = current
+    return res
 
 if __name__ == "__main__": 
     data = aoct.get_input(YEAR, DAY)
