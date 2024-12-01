@@ -8,10 +8,22 @@ YEAR = 2019
 DAY = 1
 
 def part_1(data):
-    return ""
+    d = [int(elt) for elt in data.split("\n")]
+    res = 0
+    for elt in d:
+        res += elt//3 - 2
+    return res
 
 def part_2(data):
-    return ""
+    d = [int(elt) for elt in data.split("\n")]
+    res = 0
+    for elt in d:
+        f = elt//3 - 2
+        while f > 0:
+            res += f 
+            f = f // 3 -2
+    
+    return res
 
 if __name__ == "__main__": 
     data = aoct.get_input(YEAR, DAY)
