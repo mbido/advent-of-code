@@ -8,10 +8,19 @@ YEAR = 2017
 DAY = 1
 
 def part_1(data):
-    return ""
+    # data = "1111"
+    res = 0
+    for i in range(len(data)):
+        if data[i] == data[(i + 1) % len(data)]:
+            res += int(data[i])
+    return res
 
 def part_2(data):
-    return ""
+    res = 0
+    for i in range(len(data)):
+        if data[i] == data[(i + len(data) // 2) % len(data)]:
+            res += int(data[i])
+    return res
 
 if __name__ == "__main__": 
     data = aoct.get_input(YEAR, DAY)
