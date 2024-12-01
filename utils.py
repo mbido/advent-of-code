@@ -36,3 +36,6 @@ def ppcm_pair(a: int, b:int):
 
 def ppcm(values: list):
     return reduce(ppcm_pair, values)
+
+def int_lines(string : str):
+    return [int(elt) for elt in string.split("\n")]
