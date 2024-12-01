@@ -8,10 +8,21 @@ YEAR = 2018
 DAY = 1
 
 def part_1(data):
-    return ""
+    return sum([int(elt) for elt in data.split("\n")])
 
 def part_2(data):
-    return ""
+    current = 0
+    f = [int(elt) for elt in data.split("\n")]
+
+    fs = set()
+
+    while(True):
+        for elt in f:
+            if current in fs:
+                return current
+            fs.add(current)
+            current += elt
+    return "ERROR"
 
 if __name__ == "__main__": 
     data = aoct.get_input(YEAR, DAY)
