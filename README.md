@@ -2,4 +2,4 @@
 
 My participation at the advent of code in python
 
-Total stars: <span style="color: yellow;">102*</span>
+Total stars: <span style="color: yellow;">102☆
