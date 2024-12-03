@@ -12,10 +12,8 @@ def part_1(data):
     mults = re.findall(r'mul\([0-9]{1,3},[0-9]{1,3}\)', data)
     res = 0
     for m in mults:
-        m = m[4:]
-        m = m[:-1]
-        a, b = m.split(",")
-        res+= int(a) * int(b)
+        a, b = re.search(r'mul\(([0-9]{1,3}),([0-9]{1,3})\)', m).groups()
+        res += int(a) * int(b)
     return res
 
 def part_2(data):
@@ -30,10 +28,8 @@ def part_2(data):
             do = False
             continue
         if do:
-            m = m[4:]
-            m = m[:-1]
-            a, b = m.split(",")
-            res+= int(a) * int(b)
+            a, b = re.search(r'mul\(([0-9]{1,3}),([0-9]{1,3})\)', m).groups()
+            res += int(a) * int(b)
     return res
 
 if __name__ == "__main__": 
