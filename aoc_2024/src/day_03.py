@@ -8,13 +8,10 @@ import re
 YEAR = 2024
 DAY = 3
 
+import re
+
 def part_1(data):
-    mults = re.findall(r'mul\([0-9]{1,3},[0-9]{1,3}\)', data)
-    res = 0
-    for m in mults:
-        a, b = re.search(r'mul\(([0-9]{1,3}),([0-9]{1,3})\)', m).groups()
-        res += int(a) * int(b)
-    return res
+    return sum(int(a) * int(b) for a, b in re.findall(r'mul\(([0-9]{1,3}),([0-9]{1,3})\)', data))
 
 def part_2(data):
     mults = re.findall(r'mul\([0-9]{1,3},[0-9]{1,3}\)|do\(\)|don\'t\(\)', data)
@@ -23,11 +20,9 @@ def part_2(data):
     for m in mults:
         if m == "do()":
             do = True
-            continue
-        if m == "don't()":
+        elif m == "don't()":
             do = False
-            continue
-        if do:
+        elif do:
             a, b = re.search(r'mul\(([0-9]{1,3}),([0-9]{1,3})\)', m).groups()
             res += int(a) * int(b)
     return res
