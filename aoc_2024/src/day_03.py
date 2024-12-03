@@ -3,12 +3,9 @@ import sys
 sys.path.append(os.path.abspath(os.path.join(__file__, '..', '..', '..')))
 import aoc_tools as aoct
 from utils import *
-import re
 
 YEAR = 2024
 DAY = 3
-
-import re
 
 def part_1(data):
     return sum(int(a) * int(b) for a, b in re.findall(r'mul\(([0-9]{1,3}),([0-9]{1,3})\)', data))
