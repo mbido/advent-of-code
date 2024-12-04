@@ -43,13 +43,14 @@ def is_X_MAS(x, y, grid):
     return a in ms and b in ms
 
 def part_2(data):
-    res = []
+    res = 0
     grid = data.split("\n")
     for y in range(len(grid)):
         for x in range(len(grid[0])):
             if grid[y][x] == "A":
-                res.append(is_X_MAS(x, y, grid))
-    return sum(res)
+                if is_X_MAS(x, y, grid):
+                    re += 1
+    return res
 
 if __name__ == "__main__": 
     data = aoct.get_input(YEAR, DAY)
