@@ -28,15 +28,6 @@ def get_path_weight(g : ig.Graph, vList):
         weight += int(g.es[edge]["weight"])
     return weight
 
-def pgcd(values: list):
-    return reduce(math.gcd, values)
-
-def ppcm_pair(a: int, b:int):
-    return abs(a * b) // math.gcd(a, b)
-
-def ppcm(values: list):
-    return reduce(ppcm_pair, values)
-
 def int_lines(string : str):
     return [int(elt) for elt in string.split("\n")]
 

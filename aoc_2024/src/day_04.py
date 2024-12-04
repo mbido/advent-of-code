@@ -7,7 +7,6 @@ from utils import *
 YEAR = 2024
 DAY = 4
 
-
 def check(x, x_sign, y, y_sign, grid):
     m = "XMAS"
     for i in range(len(m)):
@@ -28,8 +27,7 @@ def part_1(data):
     grid = data.split("\n")
     for y in range(len(grid)):
         for x in range(len(grid[0])):
-            if grid[y][x] == "X":
-                res += count_XMAS(x, y, grid)
+            res += count_XMAS(x, y, grid)
     return res
 
 def is_X_MAS(x, y, grid):
@@ -43,9 +41,8 @@ def part_2(data):
     grid = data.split("\n")
     for y in range(len(grid)):
         for x in range(len(grid[0])):
-            if grid[y][x] == "A":
-                if is_X_MAS(x, y, grid):
-                    res += 1
+            if is_X_MAS(x, y, grid):
+                res += 1
     return res
 
 if __name__ == "__main__": 
