@@ -49,7 +49,7 @@ def part_2(data):
         for x in range(len(grid[0])):
             if grid[y][x] == "A":
                 if is_X_MAS(x, y, grid):
-                    re += 1
+                    res += 1
     return res
 
 if __name__ == "__main__": 
