@@ -7,15 +7,11 @@ from utils import *
 YEAR = 2024
 DAY = 4
 
-def get(x, y, grid):
-    if 0 <= x < len(grid[0]) and 0 <= y < len(grid):
-        return grid[y][x]
-    return "?"
 
 def check(x, x_sign, y, y_sign, grid):
     m = "XMAS"
     for i in range(len(m)):
-        if get(x + x_sign * i, y + y_sign * i, grid) != m [i]:
+        if get_grid(x + x_sign * i, y + y_sign * i, grid) != m [i]:
             return False
     return True
 
@@ -38,8 +34,8 @@ def part_1(data):
 
 def is_X_MAS(x, y, grid):
     ms = ["MAS", "SAM"]
-    a = get(x- 1, y - 1, grid) + get(x, y, grid) + get(x + 1, y + 1, grid)
-    b = get(x + 1, y - 1, grid) + get(x, y, grid) + get(x - 1, y + 1, grid)
+    a = get_grid(x- 1, y - 1, grid) + get_grid(x, y, grid) + get_grid(x + 1, y + 1, grid)
+    b = get_grid(x + 1, y - 1, grid) + get_grid(x, y, grid) + get_grid(x - 1, y + 1, grid)
     return a in ms and b in ms
 
 def part_2(data):

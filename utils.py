@@ -39,3 +39,8 @@ def ppcm(values: list):
 
 def int_lines(string : str):
     return [int(elt) for elt in string.split("\n")]
+
+def get_grid(x, y, grid, default="?"):
+    if 0 <= x < len(grid[0]) and 0 <= y < len(grid):
+        return grid[y][x]
+    return default
