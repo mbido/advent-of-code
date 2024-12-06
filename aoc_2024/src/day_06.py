@@ -52,7 +52,7 @@ def is_looping(grid, pos):
     front = get_front(pos, dir, grid)
     path = set()
     while front != "?":
-        grid[pos[0]][pos[1]] = "X"
+        # grid[pos[0]][pos[1]] = "X"
         k = str(pos) + str(dir)
         if k in path:
             return True
@@ -65,7 +65,7 @@ def is_looping(grid, pos):
     return False
     
 
-def part_2(data):
+def part_2_old(data):
     grid = [list(r) for r in data.split("\n")]
     pos = find_pos(grid)
     res = 0
@@ -81,7 +81,28 @@ def part_2(data):
                 res += 1
     return res
 
+def for_x(params):
+    res = 0
+    data, pos, y = params
+    for x in range(len(data.split("\n")[0])):
+        g = [list(r) for r in data.split("\n")]
+        if pos == [y, x] or g[y][x] == "#":
+            continue
+        g[y][x] = "#"
+            
+        if is_looping(g, pos):
+            res += 1
+    return res
+
+def part_2(data):
+    grid = [list(r) for r in data.split("\n")]
+    pos = find_pos(grid)
+    return mp_for_sum(for_x, [[data, pos, y] for y in range(len(data.split("\n")))])
+
 if __name__ == "__main__": 
     data = aoct.get_input(YEAR, DAY)
     aoct.submit_answer(YEAR, DAY, part_1(data), send=False)
+    start_time = time.time()
     aoct.submit_answer(YEAR, DAY, part_2(data), level=2, send=False)
+    end_time = time.time()
+    print(f'Time taken : {end_time - start_time} seconds')
