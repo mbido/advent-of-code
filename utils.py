@@ -6,7 +6,8 @@ import igraph as ig
 import json
 import math
 from functools import reduce
-
+import multiprocessing as mp
+import time
 
 def md5(s):
     return hashlib.md5(s.encode('utf-8')).hexdigest()
@@ -35,3 +36,17 @@ def get_grid(x, y, grid, default="?"):
     if 0 <= x < len(grid[0]) and 0 <= y < len(grid):
         return grid[y][x]
     return default
+
+def helper_mp_for_sum(func_and_params):
+    func, params = func_and_params
+    return sum(func(p) for p in params)
+
+def mp_for_sum(func, params, n_proc=8):
+    n = len(params)
+    chunksize = (n + n_proc - 1) // n_proc 
+
+    jobs = [(func, params[i:i + chunksize]) for i in range(0, n, chunksize)]
+
+    with mp.Pool(n_proc) as pool: 
+        results = pool.imap_unordered(helper_mp_for_sum, jobs, chunksize=1)
+        return sum(results)
