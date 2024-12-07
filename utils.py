@@ -13,7 +13,7 @@ def md5(s):
     return hashlib.md5(s.encode('utf-8')).hexdigest()
 
 def add_vertex_no_duplicate(g, vertex_name):
-    try:
+    try: 
         g.vs.find(name=vertex_name)
         return False
     except ValueError:
