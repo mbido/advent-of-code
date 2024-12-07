@@ -3,7 +3,6 @@ import sys
 sys.path.append(os.path.abspath(os.path.join(__file__, '..', '..', '..')))
 import aoc_tools as aoct
 from utils import *
-import itertools as it
 YEAR = 2024
 DAY = 7
 
@@ -19,7 +18,7 @@ def compute(ops, vals):
     return res
 
 def is_valid(r, vals, n_ops=2):
-    are_sums = list(it.product(list(range(n_ops)), repeat=len(vals)-1))
+    are_sums = list(product(list(range(n_ops)), repeat=len(vals)-1))
     for a in are_sums:
         if compute(a, vals) == r:
             return True
