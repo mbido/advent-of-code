@@ -6,22 +6,20 @@ from utils import *
 YEAR = 2024
 DAY = 7
 
-def compute(ops, vals):
-    res = vals[0]
-    for i, v in enumerate(vals[1:]):
-        if ops[i] == 0:
-            res = res + v
-        elif ops[i] == 1:
-            res = res * v
-        else:
-            res = int(str(res) + str(v))
-    return res
-
 def is_valid(r, vals, n_ops=2):
-    are_sums = list(product(list(range(n_ops)), repeat=len(vals)-1))
-    for a in are_sums:
-        if compute(a, vals) == r:
-            return True
+    return recurrence(r, vals[1:], n_ops, vals[0])
+
+def recurrence(r, vals, n_ops, res):
+    if len(vals) == 0:
+        return r == res
+    
+    r_add = res + vals[0]
+    r_mul = res * vals[0]
+    r_con =  int(str(res) + str(vals[0]))
+    if recurrence(r, vals[1:], n_ops, r_add) or recurrence(r, vals[1:], n_ops, r_mul):
+        return True
+    if n_ops == 3 and recurrence(r, vals[1:], n_ops, r_con):
+        return True
     return False
 
 def part_1(data):
