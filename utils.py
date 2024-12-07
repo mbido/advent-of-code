@@ -5,7 +5,7 @@ from itertools import product, permutations
 import igraph as ig
 import json
 import math
-from functools import reduce
+from functools import reduce, cmp_to_key
 import multiprocessing as mp
 import time
 
