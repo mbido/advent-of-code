@@ -30,7 +30,7 @@ def compute_locations(grid1):
 
 def part_1(data):
     grid1 = [list(l) for l in data.split("\n")]
-    grid2 = [[0 for _ in range(len(grid1[0]))] for _ in grid1]
+    grid2 = [[0 for _ in grid1[0]] for _ in grid1]
     locations = compute_locations(grid1);
     
     for c in locations:
@@ -46,7 +46,7 @@ def part_1(data):
 
 def part_2(data):
     grid1 = [list(l) for l in data.split("\n")]
-    grid2 = [[0 for _ in range(len(grid1[0]))] for _ in grid1]
+    grid2 = [[0 for _ in grid1[0]] for _ in grid1]
     locations = compute_locations(grid1)
     
     for c in locations:
