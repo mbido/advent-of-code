@@ -8,6 +8,7 @@ import math
 from functools import reduce, cmp_to_key
 import multiprocessing as mp
 import time
+import copy
 
 def md5(s):
     return hashlib.md5(s.encode('utf-8')).hexdigest()
@@ -36,6 +37,10 @@ def get_grid(x, y, grid, default="?"):
     if 0 <= x < len(grid[0]) and 0 <= y < len(grid):
         return grid[y][x]
     return default
+
+def set_grid(x, y, grid, value):
+    if 0 <= x < len(grid[0]) and 0 <= y < len(grid):
+        grid[y][x] = value
 
 def helper_mp_for_sum(func_and_params):
     func, params = func_and_params
