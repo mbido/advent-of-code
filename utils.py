@@ -10,6 +10,10 @@ import multiprocessing as mp
 import time
 import copy
 
+cross_dirs = [(-1, 0), (0, 1), (1, 0), (0, -1)]
+all_dirs = list(product((-1, 0, 1), repeat=2))
+all_dirs.remove((0, 0))
+
 def md5(s):
     return hashlib.md5(s.encode('utf-8')).hexdigest()
 
