@@ -62,7 +62,7 @@ def get_dirs(n: int):
         res.append("O")
     return res
 
-def set_connexe2(y, x, grid, connexe, name):
+def get_connexe2(y, x, grid, connexe, name):
     a = 0
     p = []
     if grid[y][x] == name and connexe[y][x] == 0 :
@@ -76,7 +76,7 @@ def set_connexe2(y, x, grid, connexe, name):
             continue
         n = get_grid(x + xi, y + yi, grid)
         if n == name:
-            b, c = set_connexe2(y + yi, x + xi, grid, connexe, name)
+            b, c = get_connexe2(y + yi, x + xi, grid, connexe, name)
             a += b
             p += c
     return a, p
@@ -120,7 +120,7 @@ def part_2(data):
         for x, n in enumerate(l):
             if connexe[y][x] == 1:
                 continue
-            a, p = set_connexe2(y, x, grid, connexe, n)
+            a, p = get_connexe2(y, x, grid, connexe, n)
             p = compute_perimeter(p)
             res += a * p
     return res
