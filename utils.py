@@ -10,9 +10,24 @@ import multiprocessing as mp
 import time
 import copy
 
-cross_dirs = [(-1, 0), (0, 1), (1, 0), (0, -1)]
-all_dirs = list(product((-1, 0, 1), repeat=2))
-all_dirs.remove((0, 0))
+adj4 = [(-1, 0), (0, 1), (1, 0), (0, -1)]
+adj8 = [(-1, 0), (0, 1), (1, 0), (0, -1), (-1, -1), (-1, 1), (1, 1), (1, -1)]
+
+def print_grid(grid):
+    for r in grid:
+        for c in r:
+            print(c, end="")
+        print()
+    print()
+    
+def as_grid(data):
+    return [list(l) for l in data.split("\n")]
+
+def as_lines(data):
+    return data.split("\n")
+
+def nums(string):
+    return list(map(int, re.findall(r'([0-9]+)', string)))
 
 def md5(s):
     return hashlib.md5(s.encode('utf-8')).hexdigest()
@@ -59,3 +74,7 @@ def mp_for_sum(func, params, n_proc=8):
     with mp.Pool(n_proc) as pool: 
         results = pool.imap_unordered(helper_mp_for_sum, jobs, chunksize=1)
         return sum(results)
+    
+if __name__ == "__main__":
+    print(nums("76S87 678"))
+    print()
