@@ -51,16 +51,15 @@ def setup_aoc_year(year):
     src_dir = os.path.join(root_dir, "src")
     data_dir = os.path.join(root_dir, "data")
     
-    if os.path.exists(root_dir):
-        print(f"Directory for aoc {year} already exists. Exiting.")
-        return
-    
-    # Créer les répertoires s'ils n'existent pas
-    os.makedirs(src_dir, exist_ok=True)
-    os.makedirs(data_dir, exist_ok=True)
+    if not os.path.exists(root_dir):
+        # print(f"Directory for aoc {year} already exists. Exiting.")
+        # return
+        # Créer les répertoires s'ils n'existent pas
+        os.makedirs(src_dir, exist_ok=True)
+        os.makedirs(data_dir, exist_ok=True)
     
     # Créer un fichier .py pour chaque jour dans src
-    for day in range(1, 26):  # Généralement, l'AoC va du 1er au 25 décembre
+    for day in range(1, 26): 
         day_file_name = f"day_{day:02}.py"
         day_file_path = os.path.join(src_dir, day_file_name)
         if not os.path.exists(day_file_path):
@@ -75,9 +74,13 @@ YEAR = {year}
 DAY = {day}
 
 def part_1(data):
+    #data = as_grid(data)
+    data = as_lines(data)
     return ""
 
 def part_2(data):
+    #data = as_grid(data)
+    data = as_lines(data)
     return ""
 
 if __name__ == "__main__": 

@@ -8,9 +8,13 @@ YEAR = 2024
 DAY = 17
 
 def part_1(data):
+    #data = as_grid(data)
+    data = as_lines(data)
     return ""
 
 def part_2(data):
+    #data = as_grid(data)
+    data = as_lines(data)
     return ""
 
 if __name__ == "__main__": 
