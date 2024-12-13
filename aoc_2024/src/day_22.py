@@ -9,12 +9,14 @@ DAY = 22
 
 def part_1(data):
     #data = as_grid(data)
-    data = as_lines(data)
+    for l in data.split("\n"):
+        l = nums(l)
     return ""
 
 def part_2(data):
     #data = as_grid(data)
-    data = as_lines(data)
+    for l in data.split("\n"):
+        l = nums(l)
     return ""
 
 if __name__ == "__main__": 
