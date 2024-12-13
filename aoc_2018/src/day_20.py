@@ -8,9 +8,15 @@ YEAR = 2018
 DAY = 20
 
 def part_1(data):
+    #data = as_grid(data)
+    for l in data.split("\n"):
+        l = nums(l)
     return ""
 
 def part_2(data):
+    #data = as_grid(data)
+    for l in data.split("\n"):
+        l = nums(l)
     return ""
 
 if __name__ == "__main__": 
