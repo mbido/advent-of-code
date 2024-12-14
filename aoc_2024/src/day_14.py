@@ -54,7 +54,6 @@ def get_tuple(robots):
 
 def get_score(rb_pos):
     res = 0
-    N = 10
     for x, y in rb_pos:
         if (x + 1, y) in rb_pos:
             res += 1
