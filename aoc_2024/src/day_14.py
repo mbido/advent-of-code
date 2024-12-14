@@ -46,25 +46,12 @@ def part_1(data):
         
     return get_safety(grid)
 
-def get_tuple(robots):
-    res = []
-    for x, y, _, _ in robots:
-        res += [x, y]
-    return tuple(res)
-
-def get_score(rb_pos):
+def get_score(grid, robots):
     res = 0
-    for x, y in rb_pos:
-        if (x + 1, y) in rb_pos:
+    for x, y, _, _ in robots:
+        if get_grid(x + 1, y, grid, 0) > 0:
             res += 1
     return res
-
-def rb_to_pos(robots):
-    rb_pos = set()
-    for rb in robots:
-        rb_pos.add((rb[0], rb[1]))
-    return rb_pos
-
 
 def part_2(data):
     
@@ -75,8 +62,7 @@ def part_2(data):
         rb = list(map(int, re.findall(r'(\-?[0-9]+)', l)))
         robots.append(rb)
         
-    rb_pos = rb_to_pos(robots)
-    scores = [get_score(rb_pos)]
+    scores = []
 
     for i in range(1_000_000_000):
         g = [[0 for _ in range(X)] for _ in range(Y)]
@@ -87,9 +73,8 @@ def part_2(data):
             px, py, _, _ = r
             g[py][px] += 1
         
-        rb_pos = rb_to_pos(robots)
-        score = get_score(rb_pos)
-        if score / len(rb_pos) > 0.5:
+        score = get_score(g, robots)
+        if score / len(robots) > 0.5:
             pg(g)
             return i + 1
         scores.append(score)
