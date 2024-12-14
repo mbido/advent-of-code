@@ -9,6 +9,7 @@ from functools import reduce, cmp_to_key
 import multiprocessing as mp
 import time
 import copy
+import random
 
 adj4 = [(-1, 0), (0, 1), (1, 0), (0, -1)]
 adj8 = [(-1, 0), (0, 1), (1, 0), (0, -1), (-1, -1), (-1, 1), (1, 1), (1, -1)]
