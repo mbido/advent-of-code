@@ -56,10 +56,8 @@ def get_score(rb_pos):
     res = 0
     N = 10
     for x, y in rb_pos:
-        for dx, dy in adj4:
-            p = (x + dx, y + dy)
-            if p in rb_pos:
-                res += 1
+        if (x + 1, y) in rb_pos:
+            res += 1
     return res
 
 def rb_to_pos(robots):
@@ -83,7 +81,7 @@ def part_2(data):
     rb_pos = rb_to_pos(robots)
     scores = [get_score(rb_pos)]
 
-    for i in range(10_000):
+    for i in range(1_000_000_000):
         g = [[0 for _ in range(X)] for _ in range(Y)]
         for r in robots:
             px, py, vx, vy = r
@@ -94,25 +92,10 @@ def part_2(data):
         
         rb_pos = rb_to_pos(robots)
         score = get_score(rb_pos)
-        scores.append(score)
-    
-    best_score = sorted(scores)[-1]
-    
-    for i in range(10_000):
-        g = [[0 for _ in range(X)] for _ in range(Y)]
-        for r in robots2:
-            px, py, vx, vy = r
-            r[0], r[1] = move(px, py, vx, vy, X, Y)
-        for r in robots2:
-            px, py, _, _ = r
-            g[py][px] += 1
-        
-        rb_pos = rb_to_pos(robots2)
-        score = get_score(rb_pos)
-        if score == best_score:
+        if score / len(rb_pos) > 0.5:
             pg(g)
             return i + 1
-    return 0
+        scores.append(score)
 
 if __name__ == "__main__": 
     data = aoct.get_input(YEAR, DAY)
