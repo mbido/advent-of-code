@@ -74,8 +74,6 @@ def part_2(data):
     for l in data.split("\n"):
         rb = list(map(int, re.findall(r'(\-?[0-9]+)', l)))
         robots.append(rb)
-    
-    robots2 = copy.deepcopy(robots)
         
     rb_pos = rb_to_pos(robots)
     scores = [get_score(rb_pos)]
