@@ -8,13 +8,14 @@ YEAR = 2017
 DAY = 3
 
 def part_1(data):
-    #data = as_grid(data)
-    for l in data.split("\n"):
-        l = nums(l)
-    return ""
+    x = int(data)
+    k = int((math.sqrt(x) - 1) / 2) + 1
+    n = (2 * k + 1) ** 2
+    c = [n - i * 2 * k for i in range(4)]
+    d = min([abs(a - x) for a in c])
+    return 2 * k - d
 
 def part_2(data):
-    #data = as_grid(data)
     for l in data.split("\n"):
         l = nums(l)
     return ""
