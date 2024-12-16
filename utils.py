@@ -10,6 +10,8 @@ import multiprocessing as mp
 import time
 import copy
 import random
+import sys
+sys.setrecursionlimit(10000000)
 
 adj4 = [(-1, 0), (0, 1), (1, 0), (0, -1)]
 adj8 = [(-1, 0), (0, 1), (1, 0), (0, -1), (-1, -1), (-1, 1), (1, 1), (1, -1)]
