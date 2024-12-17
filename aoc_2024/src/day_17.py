@@ -62,13 +62,6 @@ def part_1(data):
     res = [str(e) for e in run(prog, reg)]
     return ",".join(res)
 
-def valid(A):
-    am1 = (A & 7) ^ 1
-    v1 = ((am1 ^ (A >> am1) ^ 4) & 7) == 2
-    a3m1 = (int(A / 3) & 7) ^ 1
-    v2 = ((a3m1 ^ (int(A / 3) >> a3m1) ^ 4) & 7) == 4
-    return v1 and v2
-
 def find(A, expected, prog):
     res = set()
     for a in A:
