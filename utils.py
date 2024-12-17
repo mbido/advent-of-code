@@ -77,7 +77,37 @@ def mp_for_sum(func, params, n_proc=8):
     with mp.Pool(n_proc) as pool: 
         results = pool.imap_unordered(helper_mp_for_sum, jobs, chunksize=1)
         return sum(results)
-    
+
+def berlekamp_massey(sequence):
+    n = len(sequence)
+    c = [1] + [0]*n  # Coefficients de la relation de récurrence
+    b = [1] + [0]*n
+    L = 0
+    m = -1
+    delta = 0
+
+    for i in range(n):
+        delta = sequence[i]
+        for j in range(1, L + 1):
+            delta += c[j] * sequence[i - j]
+        if delta != 0:
+            t = c.copy()
+            coef = delta / b[0]
+            for j in range(len(b)):
+                if i - m + j < len(c):
+                    c[i - m + j] -= coef * b[j]
+            if 2 * L <= i:
+                L = i + 1 - L
+                m = i
+                b = t
+    return c[:L + 1]
+
+def next_term(relation, previous_terms):
+    next_value = 0
+    for coef, term in zip(relation[1:], reversed(previous_terms[-(len(relation)-1):])):
+        next_value -= coef * term
+    return next_value
+
 if __name__ == "__main__":
     print(nums("76S87 678"))
     print()

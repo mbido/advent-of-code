@@ -3,3 +3,4 @@ __pycache__
 .env
 aoc-env
 .DS_Store
+*test.*
