@@ -32,6 +32,9 @@ def as_lines(data):
 def nums(string):
     return list(map(int, re.findall(r'([0-9]+)', string)))
 
+def s_nums(string):
+    return list(map(int, re.findall(r'(\-?[0-9]+)', string)))
+
 def md5(s):
     return hashlib.md5(s.encode('utf-8')).hexdigest()
 
@@ -109,5 +112,5 @@ def next_term(relation, previous_terms):
     return next_value
 
 if __name__ == "__main__":
-    print(nums("76S87 678"))
+    print(s_nums("76S-87 678"))
     print()
