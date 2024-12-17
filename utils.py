@@ -80,7 +80,7 @@ def mp_for_sum(func, params, n_proc=8):
 
 def berlekamp_massey(sequence):
     n = len(sequence)
-    c = [1] + [0]*n  # Coefficients de la relation de récurrence
+    c = [1] + [0]*n
     b = [1] + [0]*n
     L = 0
     m = -1
