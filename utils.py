@@ -11,6 +11,8 @@ import time
 import copy
 import random
 import sys
+from queue import *
+
 sys.setrecursionlimit(10000000)
 
 adj4 = [(-1, 0), (0, 1), (1, 0), (0, -1)]
