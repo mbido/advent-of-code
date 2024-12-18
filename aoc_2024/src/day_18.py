@@ -75,25 +75,28 @@ def part_1(data):
     E = (H - 1, W - 1)
     return bfs(S, E, grid)[0]
 
+def blocked(bt, R, grid, S, E):
+    grid = copy.deepcopy(grid)
+    for x, y in bt[:R]:
+        grid[y][x] = False
+    if bfs(S, E, grid) == "ERROR":
+        return True
+    return False
+
 def part_2(data):
     W = H = 71
     R = 1024
+    
+    bt = list(map(nums, data.split("\n")))
     grid = [[True for _ in range(W)] for _ in range(H)]
-    a = [["." for _ in range(W)] for _ in range(H)]
-    data = data.split("\n")
-    for i in range(R):
-        x, y = nums(data[i])
+    for x, y in bt[:R]:
         grid[y][x] = False
-        a[y][x] = "#"
+    
     S = (0, 0)
     E = (H - 1, W - 1)
-    for l in data[R:]:
-        x, y = tuple(nums(l))
-        p = (y, x)
-        grid[p[0]][p[1]] = False
-        if bfs(S, E, grid) == "ERROR":
-            return str(p[1]) + "," + str(p[0])
-    return "Not found"
+    p = bisect_left(range(len(bt)), True, key=(lambda i: int(blocked(bt, i, grid, S, E))))
+    print(p, bt[p])
+    return str(bt[p-1][0]) + "," + str(bt[p-1][1])
 
 if __name__ == "__main__": 
     data = aoct.get_input(YEAR, DAY)

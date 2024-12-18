@@ -2,16 +2,17 @@ import hashlib
 import re
 import numpy as np
 from itertools import product, permutations
+from queue import *
+from bisect import *
+from functools import reduce, cmp_to_key
 import igraph as ig
 import json
 import math
-from functools import reduce, cmp_to_key
 import multiprocessing as mp
 import time
 import copy
 import random
 import sys
-from queue import *
 
 sys.setrecursionlimit(10000000)
 
