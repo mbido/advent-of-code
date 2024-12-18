@@ -95,7 +95,6 @@ def part_2(data):
     S = (0, 0)
     E = (H - 1, W - 1)
     p = bisect_left(range(len(bt)), True, key=(lambda i: int(blocked(bt, i, grid, S, E))))
-    print(p, bt[p])
     return str(bt[p-1][0]) + "," + str(bt[p-1][1])
 
 if __name__ == "__main__": 
