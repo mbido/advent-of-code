@@ -7,6 +7,7 @@ from bisect import *
 from functools import reduce, cmp_to_key
 import igraph as ig
 import multiprocessing as mp
+import z3
 import heapq
 import json
 import math
@@ -65,12 +66,14 @@ def get_path_weight(g : ig.Graph, vList):
 def int_lines(string : str):
     return [int(elt) for elt in string.split("\n")]
 
-def get_grid(x, y, grid, default="?"):
+def get_grid(pos, grid, default="?"):
+    y, x = pos
     if 0 <= x < len(grid[0]) and 0 <= y < len(grid):
         return grid[y][x]
     return default
 
-def set_grid(x, y, grid, value):
+def set_grid(pos, grid, value):
+    y, x = pos
     if 0 <= x < len(grid[0]) and 0 <= y < len(grid):
         grid[y][x] = value
 
