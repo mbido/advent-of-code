@@ -7,39 +7,6 @@ from utils import *
 YEAR = 2024
 DAY = 18
 
-def show(grid, visited):
-    for y, l in enumerate(grid):
-        for x, c in enumerate(l):
-            w = get_grid(x, y, visited, 10**20)
-            if w != False:
-                print("O", end="")
-            elif c:
-                print(" ", end="")
-            else:
-                print("#", end="")
-        print()
-    print()
-
-def show_path(p, grid, visited):
-    res = []
-    path = [[False for _ in range(len(grid[0]))] for _ in range(len(grid))]
-    while p != (0, 0):
-        res.append(p)
-        path[p[0]][p[1]] = True
-        v = visited[p[0]][p[1]]
-        p2 = p
-        v2 = v
-        for y, x in adj4:
-            if not get_grid(p[1] + x, p[0] + y, grid, False):
-                continue
-            v3 = visited[p[0] + y][p[1] + x]
-            if v3 < v2:
-                v2 = v3
-                p2 = (p[0] + y, p[1] + x)
-        p = p2
-    show(grid, path)
-    return res
-
 def priority(pos, gn, end):
     return abs(pos[0] - end[0]) + abs(pos[1] - end[1]) + gn
 
@@ -90,9 +57,7 @@ def part_2(data):
     R = 1024
     
     bt = list(map(nums, data.split("\n")))
-    grid = [[True for _ in range(W)] for _ in range(H)]
-    for x, y in bt[:R]:
-        grid[y][x] = False
+    grid = [[(x, y) not in bt[:R] for x in range(W)] for y in range(H)]
     
     S = (0, 0)
     E = (H - 1, W - 1)
