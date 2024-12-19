@@ -45,12 +45,8 @@ def part_1(data):
     return a_star(S, E, grid)[0]
 
 def blocked(bt, R, grid, S, E):
-    grid = copy.deepcopy(grid)
-    for x, y in bt[:R]:
-        grid[y][x] = False
-    if a_star(S, E, grid) == "ERROR":
-        return True
-    return False
+    grid = [[(x, y) not in bt[:R] for x in range(len(grid[0]))] for y in range(len(grid))]
+    return a_star(S, E, grid) == "ERROR"
 
 def part_2(data):
     W = H = 71
