@@ -8,11 +8,51 @@ YEAR = 2015
 DAY = 15
 
 data = aoct.get_input(YEAR, DAY)
-
+# print(data)
 res = 0
 
-#data = as_grid(data)
-for l in data.split("\n"):
-    l = nums(l)
+# data = """Butterscotch: capacity -1, durability -2, flavor 6, texture 3, calories 8
+# Cinnamon: capacity 2, durability 3, flavor -2, texture -1, calories 3"""
 
-print(res)
+cache = {}
+def best_score(ing, ts, qtt):
+    if ts == 0:
+        c = d = f = t = 0
+        for i, ig in enumerate(ing):
+            c += ig[0] * qtt[i]
+            d += ig[1] * qtt[i]
+            f += ig[2] * qtt[i]
+            t += ig[3] * qtt[i]
+        c = max(0, c)
+        d = max(0, d)
+        f = max(0, f)
+        t = max(0, t)
+        # print(f"{qtt} -> {c * d * f * t}")
+        return max(0, c * d * f * t)
+
+    k = tuple(qtt + [ts])
+    if k in cache:
+        return cache[k]
+    
+    scores = []
+    for i, ig in enumerate(ing):
+        qtt[i] += 1
+        scores.append(best_score(ing, ts - 1, qtt))
+        qtt[i] -= 1
+        
+    cache[k] = max(scores)
+    return max(scores)
+
+
+#data = as_grid(data)
+ing = []
+for l in data.split("\n"):
+    ing.append(s_nums(l))
+
+part = 1
+print(best_score(ing, 100, [0 for _ in ing]))
+
+part = 2
+print(best_score(ing, 100, [0 for _ in ing]))
+
+print(len(cache))
