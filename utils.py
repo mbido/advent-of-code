@@ -2,13 +2,14 @@ import hashlib
 import re
 import numpy as np
 from itertools import product, permutations
-from queue import *
+from queue import PriorityQueue, Queue
 from bisect import *
 from functools import reduce, cmp_to_key
 import igraph as ig
+import multiprocessing as mp
+import heapq
 import json
 import math
-import multiprocessing as mp
 import time
 import copy
 import random
