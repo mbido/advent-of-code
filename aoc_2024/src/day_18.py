@@ -40,14 +40,16 @@ def show_path(p, grid, visited):
     show(grid, path)
     return res
 
-def bfs(start, end, grid):
+def priority(pos, gn, end):
+    return abs(pos[0] - end[0]) + abs(pos[1] - end[1]) + gn
+
+def a_star(start, end, grid):
     visited = [[False for _ in range(len(grid[0]))] for _ in range(len(grid))]
-    q = Queue()
     visited[start[0]][start[1]] = 1
-    q.put(start)
+    heap = [(priority(start, 0, end), start)]
     p = (0, 0)
-    while not q.empty():
-        y, x = q.get()
+    while heap:
+        y, x = heapq.heappop(heap)[1]
         p = (y, x)
         v = get_grid(x, y, visited, False)
         if (y, x) == end:
@@ -59,7 +61,7 @@ def bfs(start, end, grid):
             if not get_grid(p[1], p[0], grid, False) or v2 != False:
                 continue
             visited[p[0]][p[1]] = v + 1
-            q.put(p)
+            heapq.heappush(heap, (priority(p, v + 1, end), p))
     return "ERROR"
 
 def part_1(data):
@@ -73,13 +75,13 @@ def part_1(data):
 
     S = (0, 0)
     E = (H - 1, W - 1)
-    return bfs(S, E, grid)[0]
+    return a_star(S, E, grid)[0]
 
 def blocked(bt, R, grid, S, E):
     grid = copy.deepcopy(grid)
     for x, y in bt[:R]:
         grid[y][x] = False
-    if bfs(S, E, grid) == "ERROR":
+    if a_star(S, E, grid) == "ERROR":
         return True
     return False
 
@@ -99,5 +101,5 @@ def part_2(data):
 
 if __name__ == "__main__": 
     data = aoct.get_input(YEAR, DAY)
-    aoct.submit_answer(YEAR, DAY, part_1(data), send=False)
+    # aoct.submit_answer(YEAR, DAY, part_1(data), send=False)
     aoct.submit_answer(YEAR, DAY, part_2(data), level=2, send=False)
