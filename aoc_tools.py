@@ -73,22 +73,15 @@ from utils import *
 YEAR = {year}
 DAY = {day}
 
-def part_1(data):
-    #data = as_grid(data)
-    for l in data.split("\\n"):
-        l = nums(l)
-    return ""
+data = aoct.get_input(YEAR, DAY)
 
-def part_2(data):
-    #data = as_grid(data)
-    for l in data.split("\\n"):
-        l = nums(l)
-    return ""
+res = 0
 
-if __name__ == "__main__": 
-    data = aoct.get_input(YEAR, DAY)
-    aoct.submit_answer(YEAR, DAY, part_1(data), send=False)
-    aoct.submit_answer(YEAR, DAY, part_2(data), level=2, send=False)
+#data = as_grid(data)
+for l in data.split("\\n"):
+    l = nums(l)
+
+print(res)
 """)
 
     print(f"Advent of Code {year} setup complete in {root_dir}")
