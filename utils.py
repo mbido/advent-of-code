@@ -77,6 +77,16 @@ def set_grid(pos, grid, value):
     if 0 <= x < len(grid[0]) and 0 <= y < len(grid):
         grid[y][x] = value
 
+def find_in_grid(e, grid):
+    for y, r in enumerate(grid):
+        for x, c in enumerate(r):
+            if c == e:
+                return (y, x)
+    return False
+
+def manhattan(p1, p2):
+    return abs(p1[0] - p2[0]) + abs(p1[1] - p2[1])
+
 def helper_mp_for_sum(func_and_params):
     func, params = func_and_params
     return sum(func(p) for p in params)
