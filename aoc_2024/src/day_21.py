@@ -65,37 +65,7 @@ def get_path2(char, pos):
         return b + a + "A"
     return a + b + "A"
 
-
-res = 0
-for cd in codes:
-    c = cd
-    cache = {}
-    last = (3, 2)
-    r = ""
-    for char in c:
-        r += get_path1(char, last)
-        last = find_in_grid(char, N)
-    c = r
-    
-    cache = {}
-    last = (0, 2)
-    r = ""
-    for char in c:
-        r += get_path2(char, last)
-        last = find_in_grid(char, D)
-    c = r
-    cache = {}
-    last = (0, 2)
-    r = ""
-    for char in c:
-        r += get_path2(char, last)
-        last = find_in_grid(char, D)
-    c = r
-    
-    res += len(c) * int(cd[:-1])
-    
-print(res)
-
+cache = {}
 def helper(code, depth):
     k = code + str(depth)
     if k in cache:
@@ -113,6 +83,19 @@ def helper(code, depth):
         last = find_in_grid(char, D)
     cache[k] = res
     return res
+
+res = 0
+for cd in codes:
+    c = cd
+    last = (3, 2)
+    r = ""
+    for char in c:
+        r += get_path1(char, last)
+        last = find_in_grid(char, N)
+    c = r
+    r = helper(c, 2)
+    res += r * int(cd[:-1])
+print(res)
 
 res = 0
 for cd in codes:
