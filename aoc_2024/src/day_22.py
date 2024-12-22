@@ -36,32 +36,36 @@ def nth_secret(secret):
 
 print(sum(list(map(nth_secret, secrets))))
 
+def next_secret(secret):
+    a = secret * 64
+    a ^= secret
+    a %= P
+    
+    b = a // 32
+    b ^= a
+    b %= P
+    
+    c = b * 2048
+    c ^= b
+    c %= P
+    return c
+
+
 def dif_digits(secret):
     digits = []
     diff = [None]
     sequences = {}
     set_sequences = set()
     for _ in range(N):
-        a = secret * 64
-        a ^= secret
-        a %= P
-        
-        b = a // 32
-        b ^= a
-        b %= P
-        
-        c = b * 2048
-        c ^= b
-        c %= P
-        secret = c
         digits.append(secret % 10)
-        if len(digits) > 1:
+        if len(digits) >= 2:
             diff.append(digits[-1] - digits[-2])
-        if len(diff) > 4:
+        if len(diff) >= 5:
             sq = (diff[-4], diff[-3], diff[-2], diff[-1])
             if sq not in sequences:
                 set_sequences.add(sq)
                 sequences[sq] = digits[-1]
+        secret = next_secret(secret)
     return digits, diff, sequences, set_sequences
 
 L = []
