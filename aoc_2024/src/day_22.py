@@ -16,7 +16,7 @@ data = aoct.get_input(YEAR, DAY)
 
 secrets = nums(data)
 
-P = 16777216
+P = 16777216 
 N = 2000
 def nth_secret(secret):
     for _ in range(N):
