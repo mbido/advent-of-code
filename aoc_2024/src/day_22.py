@@ -8,18 +8,17 @@ YEAR = 2024
 DAY = 22
 
 data = aoct.get_input(YEAR, DAY)
-# print(data)
 
-data = """1
-2
-3
-2024"""
+# data = """1
+# 2
+# 3
+# 2024"""
 
 secrets = nums(data)
 
 P = 16777216
 N = 2000
-def next_secret(secret):
+def nth_secret(secret):
     for _ in range(N):
         a = secret * 64
         a ^= secret
@@ -35,12 +34,13 @@ def next_secret(secret):
         secret = c
     return secret
 
-# print(sum(list(map(next_secret, secrets))))
+print(sum(list(map(nth_secret, secrets))))
 
-
-def next_secret(secret):
+def dif_digits(secret):
     digits = []
-    diffs = [-20]
+    diff = [None]
+    sequences = {}
+    set_sequences = set()
     for _ in range(N):
         a = secret * 64
         a ^= secret
@@ -53,76 +53,43 @@ def next_secret(secret):
         c = b * 2048
         c ^= b
         c %= P
-        
-        
         secret = c
         digits.append(secret % 10)
         if len(digits) > 1:
-            diffs.append(digits[-1] - digits[-2])
-    return digits, diffs
+            diff.append(digits[-1] - digits[-2])
+        if len(diff) > 4:
+            sq = (diff[-4], diff[-3], diff[-2], diff[-1])
+            if sq not in sequences:
+                set_sequences.add(sq)
+                sequences[sq] = digits[-1]
+    return digits, diff, sequences, set_sequences
 
-digits = []
-diffs = []
-max_digit = []
-max_digit_sequences = []
-sequences = set()
+L = []
+D = []
+S = []
+all_S = set()
 for s in secrets:
-    d, df = next_secret(s)
-    digits.append(d)
-    diffs.append(df)
-    
-    for i in range(4, len(df)):
-        sq = (df[i-3], df[i - 2], df[i - 1], df[i])
-        sequences.add(sq)
-    # diffs.add(tuple(df))
-    
-    max_digit.append(max(d))
-    # print(max_digit[-1])
-    # break
-I = 0
-def first_sequence(sequence):
-    # global I
-    # print(I)
-    # I += 1
-    
+    # print(s)
+    l, d, sq, stq = dif_digits(s)
+    L.append(l)
+    D.append(d)
+    S.append(sq)
+    all_S.update(stq)
+
+def number_of_bananas(sq):
     res = 0
-    for i in range(len(digits)):
-        dig = digits[i]
-        dif = diffs[i]
-        for j in range(3, len(dig)):
-            if (dif[j - 3], dif[j - 2], dif[j - 1], dif[j]) == sequence:
-                res += dig[j]
-                # print(dig[j])
-                break
+    for s in S:
+        if sq in s:
+            res += s[sq]
     return res
 
-# N = 8
-# size = len(sequences) // N
-# i = 7
-
-sequences = list(sequences)
-# print(first_sequence((-2,1,-1,3)))
-
 res = 0
+for sq in all_S:
+    res = max(res, number_of_bananas(sq))
 
-l = len(sequences)
-for i in range(l):
-    # print(f"{i} -> {res}")
-    sq = random.choice(sequences)
-    sequences.remove(sq)
-    r = first_sequence(sq)
-    if r > res:
-        res = r
-        print(f"{i} -> {res}")
+print(res)
 
+# print(len(L[0]))
+# print(len(D[0]))
+# print(len(S[0]))
 
-print(f"result : {res}")
-# ss = sorted(sequences, key=first_sequence)
-# print(max(list(map(first_sequence, sequences))))
-# res = 0
-
-# #data = as_grid(data)
-# for l in data.split("\n"):
-#     l = nums(l)
-
-# print(res)
