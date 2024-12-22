@@ -87,11 +87,10 @@ def find_in_grid(e, grid):
 def manhattan(p1, p2):
     return abs(p1[0] - p2[0]) + abs(p1[1] - p2[1])
 
-def helper_mp_for_sum(func_and_params):
-    func, params = func_and_params
-    return sum(func(p) for p in params)
-
 def mp_for_sum(func, params, n_proc=8):
+    def helper_mp_for_sum(func_and_params):
+        func, params = func_and_params
+        return sum(func(p) for p in params)
     n = len(params)
     chunksize = (n + n_proc - 1) // n_proc 
 
