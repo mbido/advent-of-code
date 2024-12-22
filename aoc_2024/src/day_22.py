@@ -56,7 +56,7 @@ def dif_digits(secret):
     diff = [None]
     sequences = {}
     set_sequences = set()
-    for _ in range(N):
+    for _ in range(N+1):
         digits.append(secret % 10)
         if len(digits) >= 2:
             diff.append(digits[-1] - digits[-2])
