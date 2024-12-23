@@ -13,7 +13,9 @@ data = aoct.get_input(YEAR, DAY)
 V = list(set(re.findall(r'[a-z]{2}', data)))
 V_T = {V[i] : i for i in range(len(V))}
 edges = [(V_T[a], V_T[b]) for a, b in re.findall(r'([a-z]{2})\-([a-z]{2})', data)]
-G = ig.Graph(edges=edges)
+G = ig.Graph(edges=edges, directed=False)
+# edges = [(V_T[a], V_T[b], int(c)) for a, b, c in re.findall(r'([a-z]{2})\-([a-z]{2})\-(\d+)', data)]
+# G = ig.Graph(edges=[(s,t) for s,t,_ in edges], directed=False, edge_attrs={"weight": [w for _,_,w in edges]})
 
 print(len([c for c in G.cliques(min=3, max=3) if any(V[e].startswith("t") for e in c)]))
 print(",".join(sorted([V[i] for i in max(G.cliques(), key=lambda e: len(e))])))

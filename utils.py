@@ -20,7 +20,16 @@ import sys
 
 # ------ TUTORIALS -------
 
-# iGraph creation and cliques -> 2024/23/12
+# iGraph :
+# g.union(g2) <=>  g |= g2
+# g.intersection(g2) <=> g and g2
+# g.disjoint_union(g2)
+# g.difference(g2)
+# g.complementer() 
+# g.cliques()
+# g.cliques(3) <=> g.cliques(min=3)
+# g.cliques(max=3)
+# g.cliques(min=3, max=3)
 
 
 # ------ Tools -------
