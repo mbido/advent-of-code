@@ -5,6 +5,7 @@ from itertools import product, permutations
 from queue import PriorityQueue, Queue
 from bisect import *
 from functools import reduce, cmp_to_key
+import matplotlib.pyplot as plt
 import igraph as ig
 import multiprocessing as mp
 import z3
