@@ -14,24 +14,10 @@ V_T = {V[i] : i for i in range(len(V))}
 
 G = ig.Graph()
 G.add_vertices(len(V))
-
-edges = []
-for l in data.split("\n"):
-    a, b = l.split("-")
-    edges.append((V_T[a], V_T[b]))
+    
+edges = [(V_T[a], V_T[b]) for a, b in re.findall(r'([a-z]{2})\-([a-z]{2})', data)]
 
 G.add_edges(edges)
 
-cliques = G.cliques(min=3, max=3)
-
-res = 0
-for q in cliques:
-    for e in q:
-        if V[e][0] == "t":
-            res += 1
-            break
-
-print(res)
-
-LAN = max(G.cliques(), key=lambda e: len(e))
-print(",".join(sorted([V[i] for i in LAN])))
+print(len([c for c in G.cliques(min=3, max=3) if any(V[e].startswith("t") for e in c)]))
+print(",".join(sorted([V[i] for i in max(G.cliques(), key=lambda e: len(e))])))

@@ -7,6 +7,7 @@ from bisect import *
 from functools import reduce, cmp_to_key
 import matplotlib.pyplot as plt
 import igraph as ig
+import networkx as nx
 import multiprocessing as mp
 import z3
 import heapq
