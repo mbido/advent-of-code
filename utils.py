@@ -17,6 +17,13 @@ import copy
 import random
 import sys
 
+# ------ TUTORIALS -------
+
+# iGraph creation and cliques -> 2024/23/12
+
+
+# ------ Tools -------
+
 sys.setrecursionlimit(10000000)
 
 adj4 = [(-1, 0), (0, 1), (1, 0), (0, -1)]
