@@ -21,16 +21,18 @@ import sys
 # ------ TUTORIALS -------
 
 # iGraph :
-# g.union(g2) <=>  g |= g2
-# g.intersection(g2) <=> g and g2
-# g.disjoint_union(g2)
-# g.difference(g2)
-# g.complementer() 
-# g.cliques()
-# g.cliques(3) <=> g.cliques(min=3)
-# g.cliques(max=3)
-# g.cliques(min=3, max=3)
-
+# G.union(g2) <=>  g |= g2
+# G.intersection(g2) <=> g and g2
+# G.disjoint_union(g2)
+# G.difference(g2)
+# G.complementer() 
+# G.cliques()
+# G.cliques(3) <=> G.cliques(min=3)
+# G.cliques(max=3)
+# G.cliques(min=3, max=3)
+# G.largest_cliques()
+# G.mincut(source=None, target=None, capacity=None) -> igraph.Cut -> cut_value ; partition ; crossing
+# G.st_mincut(source, target, weights=None) -> cut.edges ; cut.cut_size ; cut.partition
 
 # ------ Tools -------
 

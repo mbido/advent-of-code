@@ -16,4 +16,4 @@ edges = [(V_T[a], V_T[b]) for a, b in re.findall(r'([a-z]{2})\-([a-z]{2})', data
 G = ig.Graph(edges=edges, directed=False)
 
 print(len([c for c in G.cliques(min=3, max=3) if any(V[e].startswith("t") for e in c)]))
-print(",".join(sorted([V[i] for i in max(G.cliques(), key=lambda e: len(e))])))
+print(",".join(sorted([V[i] for i in G.largest_cliques()[0]])))
