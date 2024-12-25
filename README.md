@@ -2,4 +2,4 @@
 
 My participation at the advent of code in python
 
-![Statistiques AOC](https://aoc-stats.vercel.app/api/card?username=mbido&totalStars=170&currentYearStars=46&currentDay=23&completedDays=23&currentYear=2024)
+![Statistiques AOC](https://aoc-stats.vercel.app/api/card?username=mbido&totalStars=174&currentYearStars=50&currentDay=25&completedDays=25&currentYear=2024)

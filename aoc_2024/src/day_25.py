@@ -10,17 +10,38 @@ DAY = 25
 data = aoct.get_input(YEAR, DAY)
 
 res = 0
+Keys = []
+Locks = []
+for g in data.split("\n\n"):
+    g = [[c for c in r] for r in g.split("\n")]
+    if g[0].count("#") == 5:
+        Locks.append(g)
+    else:
+        Keys.append(g)
 
-# # graphs
-# V = list(set(re.findall(r'[a-z]{2}', data)))
-# V_T = {V[i] : i for i in range(len(V))}
-# edges = [(V_T[a], V_T[b]) for a, b in re.findall(r'([a-z]{2})\-([a-z]{2})', data)]
-# G = ig.Graph(edges=edges, directed=False)
-# # edges = [(V_T[a], V_T[b], int(c)) for a, b, c in re.findall(r'([a-z]{2})\-([a-z]{2})\-(\d+)', data)]
-# # G = ig.Graph(edges=[(s,t) for s,t,_ in edges], directed=False, edge_attrs={"weight": [w for _,_,w in edges]})
+def to_cols(grid):
+    res = []
+    for x in range(len(grid[0])):
+        height = 0
+        for y in range(len(grid)):
+            if grid[y][x] == "#":
+                height += 1
+        res.append(height - 1)
+    return res
 
-#data = as_grid(data)
-for l in data.split("\n"):
-    l = nums(l)
+c_Keys = list(map(to_cols, Keys))
+c_Locks = list(map(to_cols, Locks))
+
+def does_match(key, lock):
+    for i in range(len(key)):
+        if key[i] + lock[i] > 5:
+            return False 
+    return True
+
+for k in c_Keys:
+    for l in c_Locks:
+        # print(f"k={k}, l={l} -> {does_match(k, l)}")
+        if does_match(k, l):
+            res += 1
 
 print(res)
