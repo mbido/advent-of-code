@@ -18,6 +18,10 @@ import copy
 import random
 import sys
 import sympy
+from pathlib import Path
+
+
+sys.setrecursionlimit(10000000)
 
 # ------ TUTORIALS -------
 
@@ -37,10 +41,13 @@ import sympy
 
 # ------ Tools -------
 
-sys.setrecursionlimit(10000000)
 
 adj4 = [(-1, 0), (0, 1), (1, 0), (0, -1)]
 adj8 = [(-1, 0), (0, 1), (1, 0), (0, -1), (-1, -1), (-1, 1), (1, 1), (1, -1)]
+alpha = "abcdefghijklmnopqrstuvwxyz"
+alphA = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+Alpha = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+ALPHA = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
 
 
 def print_grid(grid):
@@ -51,8 +58,16 @@ def print_grid(grid):
     print()
 
 
-def as_grid(data):
-    return [list(l) for l in data.split("\n")]
+def as_grid(data, type=None):
+    res = []
+    for l in data.split("\n"):
+        ll = list(l)
+        if type is None:
+            print("NONE")
+            res.append[ll]
+        else:
+            res.append([type(c) for c in ll])
+    return res
 
 
 def as_lines(data):
@@ -199,9 +214,9 @@ def get_divisors(n):
 def str2dig(string: str) -> int:
     """Give the digit corresponding to the start of the string -1 if not found:
 
-    Example:
-        str2dig("nine") -> 9
-        str2dig("knine") -> -1
+    Examples:
+        str2dig("ninesdfkdji") -> 9
+        str2dig("kninekqsdfj") -> -1
     """
     str2dig_dict: dict = {
         "zero": 0,
@@ -220,6 +235,27 @@ def str2dig(string: str) -> int:
         if string[: len(keys)] == keys:
             return str2dig_dict[keys]
     return -1
+
+
+def get_path_dict(paths: list[str | Path]) -> dict:
+    """Builds a tree like structure out of a list of paths"""
+
+    def _recurse(dic: dict, chain: tuple[str, ...] | list[str]):
+        if len(chain) == 0:
+            return
+        if len(chain) == 1:
+            dic[chain[0]] = None
+            return
+        key, *new_chain = chain
+        if key not in dic:
+            dic[key] = {}
+        _recurse(dic[key], new_chain)
+        return
+
+    new_path_dict = {}
+    for path in paths:
+        _recurse(new_path_dict, Path(path).parts)
+    return new_path_dict
 
 
 if __name__ == "__main__":

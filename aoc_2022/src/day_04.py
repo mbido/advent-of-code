@@ -7,19 +7,32 @@ from utils import *
 YEAR = 2022
 DAY = 4
 
-def part_1(data):
-    #data = as_grid(data)
-    for l in data.split("\n"):
-        l = nums(l)
-    return ""
+data = aoct.get_input(YEAR, DAY)
 
-def part_2(data):
-    #data = as_grid(data)
-    for l in data.split("\n"):
-        l = nums(l)
-    return ""
+res = 0
 
-if __name__ == "__main__": 
-    data = aoct.get_input(YEAR, DAY)
-    aoct.submit_answer(YEAR, DAY, part_1(data), send=False)
-    aoct.submit_answer(YEAR, DAY, part_2(data), level=2, send=False)
+# graphs
+# V = list(set(re.findall(r'[a-z]{2}', data)))
+# V_T = {V[i] : i for i in range(len(V))}
+# edges = [(V_T[a], V_T[b]) for a, b in re.findall(r'([a-z]{2})\-([a-z]{2})', data)]
+# G = ig.Graph(edges=edges, directed=False)
+# edges = [(V_T[a], V_T[b], int(c)) for a, b, c in re.findall(r'([a-z]{2})\-([a-z]{2})\-(\d+)', data)]
+# G = ig.Graph(edges=[(s,t) for s,t,_ in edges], directed=False, edge_attrs={"weight": [w for _,_,w in edges]})
+
+#data = as_grid(data)
+for l in data.split("\n"):
+    a1, a2, b1, b2 = nums(l)
+    if a1 >= b1 and a2 <= b2 or a1 <= b1 and a2 >= b2:
+        res += 1
+
+print(res)
+
+res = 0 
+for l in data.split("\n"):
+    a1, a2, b1, b2 = nums(l)
+    a = list(range(a1, a2 + 1))
+    b = list(range(b1, b2 + 1))
+    if any([elt in b for elt in a]):
+        res += 1
+
+print(res)

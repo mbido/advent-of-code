@@ -7,36 +7,51 @@ from utils import *
 YEAR = 2022
 DAY = 2
 
-def part_1(data):
-    res = 0
-    for line in data.split("\n"):
-        a, b = line.split(" ")
-        a = ord(a) - ord("A") + 1
-        b = ord(b) - ord("X") + 1
-        if a == b:
-            res += b + 3
-        elif b == a % 3 + 1:
-            res += b + 6
-        else:
-            res += b
-    return res
+data = aoct.get_input(YEAR, DAY)
 
-def part_2(data):
-    res = 0
-    for line in data.split("\n"):
-        a, b = line.split(" ")
-        a = ord(a) - ord("A") + 1
-        win = a % 3 + 1
-        lose = (a + 1) % 3 + 1
-        if b == "Y":
-            res += a + 3
-        elif b == "X":
-            res += lose
-        else:
-            res += win + 6
-    return res
+res = 0
 
-if __name__ == "__main__": 
-    data = aoct.get_input(YEAR, DAY)
-    aoct.submit_answer(YEAR, DAY, part_1(data), send=False)
-    aoct.submit_answer(YEAR, DAY, part_2(data), level=2, send=False)
+# graphs
+# V = list(set(re.findall(r'[a-z]{2}', data)))
+# V_T = {V[i] : i for i in range(len(V))}
+# edges = [(V_T[a], V_T[b]) for a, b in re.findall(r'([a-z]{2})\-([a-z]{2})', data)]
+# G = ig.Graph(edges=edges, directed=False)
+# edges = [(V_T[a], V_T[b], int(c)) for a, b, c in re.findall(r'([a-z]{2})\-([a-z]{2})\-(\d+)', data)]
+# G = ig.Graph(edges=[(s,t) for s,t,_ in edges], directed=False, edge_attrs={"weight": [w for _,_,w in edges]})
+
+#data = as_grid(data)
+p1 = ["A", "B", "C"]
+p2 = ["X", "Y", "Z"]
+
+for l in data.split("\n"):
+    a, b = l.split(" ")
+    ia = p1.index(a)
+    ib = p2.index(b)
+    res += ib + 1
+    
+    if ia == ib:
+        res += 3
+    elif ia == (ib - 1 ) % 3:
+        res += 6
+
+
+print(res)
+
+
+res = 0
+for l in data.split("\n"):
+    a, b = l.split(" ")
+    ia = p1.index(a)
+    ib = p2.index(b)
+    
+    res += 1
+    
+    if ib == 0:
+        res += (ia - 1) % 3
+    elif ib == 1:
+        res += ia + 3
+    else:
+        res += (ia + 1) % 3 + 6
+        
+        
+print(res)
