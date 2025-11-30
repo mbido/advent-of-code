@@ -51,6 +51,7 @@ ALPHA = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
 
 
 def print_grid(grid):
+    # prints a grid of chars
     for r in grid:
         for c in r:
             print(c, end="")
@@ -58,15 +59,12 @@ def print_grid(grid):
     print()
 
 
-def as_grid(data, type=None):
+def as_grid(data, t=str):
     res = []
     for l in data.split("\n"):
         ll = list(l)
-        if type is None:
-            print("NONE")
-            res.append[ll]
-        else:
-            res.append([type(c) for c in ll])
+        print(res, ll, type(ll))
+        res.append([t(c) for c in ll])
     return res
 
 
@@ -79,11 +77,15 @@ def nums(string):
 
 
 def s_nums(string):
-    return list(map(int, re.findall(r"(\-?\d+)", string)))
+    return list(map(int, re.findall(r"([\-\+]?\d+)", string)))
 
 
 def floats(string):
     return list(map(float, re.findall(r"(?:\d+(?:\.\d*)?|\.\d+)", string)))
+
+
+def s_floats(string):
+    return list(map(float, re.findall(r"[\-\+]?(?:\d+(?:\.\d*)?|\.\d+)", string)))
 
 
 def md5(s):
@@ -124,6 +126,8 @@ def set_grid(pos, grid, value):
     y, x = pos
     if 0 <= x < len(grid[0]) and 0 <= y < len(grid):
         grid[y][x] = value
+        return True
+    return False
 
 
 def find_in_grid(e, grid):
@@ -260,7 +264,16 @@ def get_path_dict(paths: list[str | Path]) -> dict:
 
 if __name__ == "__main__":
     print("Starting tests...")
-    # print(floats("76S-87 678sd3.4"))
+    # print(floats("76-87 678sd3.4"))
+    # print(s_floats("76-87 678sd3.4"))
+    # print(s_nums("76-87 678sd3.4"))
+    # print(nums("76-87 678sd3.4"))
     # print(re.findall(r'(?:\d+(?:\.\d*)?|\.\d+)', "76S-87 678sd3.4"))
-    print(str2dig("nine"))
-    print(str2dig("knines"))
+    # print(str2dig("nine"))
+    # print(str2dig("knines"))
+    #     data = """abcde
+    # fghij"""
+    #     print(as_grid(data))
+    # print(s_nums("asd3, 1, 23sl9s-23"))
+    # fib = berlekamp_massey([1, 1, 2, 3, 5, 8])
+    print(get_divisors(random.randint(10, 100000)))
