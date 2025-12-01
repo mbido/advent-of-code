@@ -264,10 +264,10 @@ def get_path_dict(paths: list[str | Path]) -> dict:
 
 if __name__ == "__main__":
     print("Starting tests...")
-    # print(floats("76-87 678sd3.4"))
-    # print(s_floats("76-87 678sd3.4"))
-    # print(s_nums("76-87 678sd3.4"))
-    # print(nums("76-87 678sd3.4"))
+    print(floats("76-87 678sd3.4"))
+    print(s_floats("76-87 678sd3.4"))
+    print(s_nums("76-87 678sd3.4"))
+    print(nums("76-87 678sd3.4"))
     # print(re.findall(r'(?:\d+(?:\.\d*)?|\.\d+)', "76S-87 678sd3.4"))
     # print(str2dig("nine"))
     # print(str2dig("knines"))
@@ -276,4 +276,4 @@ if __name__ == "__main__":
     #     print(as_grid(data))
     # print(s_nums("asd3, 1, 23sl9s-23"))
     # fib = berlekamp_massey([1, 1, 2, 3, 5, 8])
-    print(get_divisors(random.randint(10, 100000)))
+    # print(get_divisors(random.randint(10, 100000)))

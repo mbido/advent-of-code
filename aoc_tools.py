@@ -4,6 +4,7 @@ from dotenv import load_dotenv
 
 load_dotenv()
 WORKING_DIR = os.getenv("WORKING_DIR")
+MAX_DAYS = 12
 
 
 def get_cookie():
@@ -67,7 +68,7 @@ def setup_aoc_year(year):
 
     # Créer un fichier .py pour chaque jour dans src
 
-    for day in range(1, 26):
+    for day in range(1, MAX_DAYS + 1):
         day_file_name = f"day_{day:02}.py"
         day_file_path = os.path.join(src_dir, day_file_name)
         if not os.path.exists(day_file_path):
