@@ -48,7 +48,7 @@ ranges = [nums(p) for p in data.split(",")]
 for a, b in ranges:
     for i in range(a, b + 1):
         si = str(i)
-        for l in range(1, len(si)):
+        for l in range(1, len(si) // 2):
             parsed = parse_size_n(si, l)
             b = [elt == parsed[0] for elt in parsed]
             if all(b):

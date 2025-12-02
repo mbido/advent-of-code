@@ -5,3 +5,5 @@ aoc-env
 .DS_Store
 *test.*
 target
+aoc_to_sql.py
+aoc_leaderboard.db
