@@ -2,4 +2,4 @@
 
 My participation at the advent of code.
 
-![Statistiques AOC](https://aoc-stats.vercel.app/api/card?username=mbido&totalStars=189&currentYearStars=4&currentDay=2&completedDays=2&currentYear=2025)
+![Statistiques AOC](https://aoc-stats.vercel.app/api/card?username=mbido&totalStars=191&currentYearStars=6&currentDay=3&completedDays=3&currentYear=2025)

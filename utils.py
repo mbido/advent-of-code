@@ -1,14 +1,6 @@
 import hashlib
 import re
 import numpy as np
-from itertools import product, permutations
-from queue import PriorityQueue, Queue
-from bisect import *
-from functools import reduce, cmp_to_key
-import matplotlib.pyplot as plt
-import igraph as ig
-import networkx as nx
-import multiprocessing as mp
 import z3
 import heapq
 import json
@@ -18,29 +10,22 @@ import copy
 import random
 import sys
 import sympy
+import igraph as ig
+import networkx as nx
+from itertools import product, permutations
+from queue import PriorityQueue, Queue
+from bisect import *
+from functools import reduce, cmp_to_key
+import matplotlib.pyplot as plt
 from pathlib import Path
+from collections import deque
+from typing import List, Tuple, Dict, Any, Union, Callable, Optional, Generator
 
+sys.setrecursionlimit(100000000)
 
-sys.setrecursionlimit(10000000)
-
-# ------ TUTORIALS -------
-
-# iGraph :
-# G.union(g2) <=>  g |= g2
-# G.intersection(g2) <=> g and g2
-# G.disjoint_union(g2)
-# G.difference(g2)
-# G.complementer()
-# G.cliques()
-# G.cliques(3) <=> G.cliques(min=3)
-# G.cliques(max=3)
-# G.cliques(min=3, max=3)
-# G.largest_cliques()
-# G.mincut(source=None, target=None, capacity=None) -> igraph.Cut -> cut_value ; partition ; crossing
-# G.st_mincut(source, target, weights=None) -> cut.edges ; cut.cut_size ; cut.partition
-
-# ------ Tools -------
-
+# ==============================================================================
+# CONSTANTS
+# ==============================================================================
 
 adj4 = [(-1, 0), (0, 1), (1, 0), (0, -1)]
 adj8 = [(-1, 0), (0, 1), (1, 0), (0, -1), (-1, -1), (-1, 1), (1, 1), (1, -1)]
@@ -49,50 +34,34 @@ alphA = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
 Alpha = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
 ALPHA = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
 
-
-def print_grid(grid):
-    # prints a grid of chars
-    for r in grid:
-        for c in r:
-            print(c, end="")
-        print()
-    print()
+# ==============================================================================
+# GRAPHS (IGRAPH)
+# ==============================================================================
 
 
-def as_grid(data, t=str):
-    res = []
-    for l in data.split("\n"):
-        ll = list(l)
-        print(res, ll, type(ll))
-        res.append([t(c) for c in ll])
-    return res
+# g.union(g2) <=> g |= g2
+# g.intersection(g2) <=> g and g2
+# g.disjoint_union(g2)
+# g.difference(g2)
+# g.complementer()
+# g.cliques()
+# g.cliques(3) <=> g.cliques(min=3)
+# g.cliques(max=3)
+# g.cliques(min=3, max=3)
+# g.largest_cliques()
+# g.mincut(source=None, target=None, capacity=None) -> igraph.Cut -> cut_value ; partition ; crossing
+# g.st_mincut(source, target, weights=None) -> cut.edges ; cut.cut_size ; cut.partition
+# g.distances(source, target, weights=...)
+# g.get_shortest_paths(v, to=..., weights=..., output="vpath")
+# g.get_all_shortest_paths(v, to=..., weights=..., output="vpath")
+# g.simplify()
+# g.spanning_tree(weights=...)
+# g.degree(u, mod="...") -> mod in {"in", "out"}
+# g.topological_sorting(mode="...")
 
 
-def as_lines(data):
-    return data.split("\n")
-
-
-def nums(string):
-    return list(map(int, re.findall(r"(\d+)", string)))
-
-
-def s_nums(string):
-    return list(map(int, re.findall(r"([\-\+]?\d+)", string)))
-
-
-def floats(string):
-    return list(map(float, re.findall(r"(?:\d+(?:\.\d*)?|\.\d+)", string)))
-
-
-def s_floats(string):
-    return list(map(float, re.findall(r"[\-\+]?(?:\d+(?:\.\d*)?|\.\d+)", string)))
-
-
-def md5(s):
-    return hashlib.md5(s.encode("utf-8")).hexdigest()
-
-
-def add_vertex_no_duplicate(g, vertex_name):
+def add_vertex_no_duplicate(g: ig.Graph, vertex_name: str) -> bool:
+    """Ajoute un sommet au graphe igraph seulement s'il n'existe pas déjà (par nom)."""
     try:
         g.vs.find(name=vertex_name)
         return False
@@ -101,7 +70,8 @@ def add_vertex_no_duplicate(g, vertex_name):
         return True
 
 
-def get_path_weight(g: ig.Graph, vList):
+def get_path_weight(g: ig.Graph, vList: List[Any]) -> int:
+    """Calcule le poids total d'un chemin défini par une liste de sommets."""
     weight = 0
     for i in range(len(vList) - 1):
         edge = g.get_eid(vList[i], vList[i + 1], error=False)
@@ -111,18 +81,116 @@ def get_path_weight(g: ig.Graph, vList):
     return weight
 
 
-def int_lines(string: str):
+# ==============================================================================
+# PARSING & STRING MANIPULATION
+# ==============================================================================
+
+
+def as_lines(data: str) -> List[str]:
+    """Sépare une chaîne de caractères par sauts de ligne."""
+    return data.split("\n")
+
+
+def int_lines(string: str) -> List[int]:
+    """Convertit une chaîne multi-lignes en liste d'entiers (un par ligne)."""
     return [int(elt) for elt in string.split("\n")]
 
 
-def get_grid(pos, grid, default="?"):
+def nums(string: str) -> List[int]:
+    """Extrait tous les nombres entiers positifs d'une chaîne."""
+    return list(map(int, re.findall(r"(\d+)", string)))
+
+
+def s_nums(string: str) -> List[int]:
+    """Extrait tous les nombres entiers (positifs et négatifs) d'une chaîne."""
+    return list(map(int, re.findall(r"([\-\+]?\d+)", string)))
+
+
+def floats(string: str) -> List[float]:
+    """Extrait tous les nombres à virgule positifs d'une chaîne."""
+    return list(map(float, re.findall(r"(?:\d+(?:\.\d*)?|\.\d+)", string)))
+
+
+def s_floats(string: str) -> List[float]:
+    """Extrait tous les nombres à virgule (positifs et négatifs) d'une chaîne."""
+    return list(map(float, re.findall(r"[\-\+]?(?:\d+(?:\.\d*)?|\.\d+)", string)))
+
+
+def str2dig(string: str) -> int:
+    """Convertit le nom d'un chiffre (anglais) en début de chaîne en entier (-1 si non trouvé)."""
+    str2dig_dict: dict = {
+        "zero": 0,
+        "one": 1,
+        "two": 2,
+        "three": 3,
+        "four": 4,
+        "five": 5,
+        "six": 6,
+        "seven": 7,
+        "eight": 8,
+        "nine": 9,
+    }
+    for keys in str2dig_dict:
+        if string[: len(keys)] == keys:
+            return str2dig_dict[keys]
+    return -1
+
+
+def md5(s: str) -> str:
+    """Retourne le hash MD5 hexadécimal d'une chaîne UTF-8."""
+    return hashlib.md5(s.encode("utf-8")).hexdigest()
+
+
+def get_path_dict(paths: List[Union[str, Path]]) -> Dict[str, Any]:
+    """Construit une structure arborescente (dictionnaire imbriqué) à partir d'une liste de chemins."""
+
+    def _recurse(dic: dict, chain: Union[Tuple[str, ...], List[str]]):
+        if len(chain) == 0:
+            return
+        if len(chain) == 1:
+            dic[chain[0]] = None
+            return
+        key, *new_chain = chain
+        if key not in dic:
+            dic[key] = {}
+        _recurse(dic[key], new_chain)
+        return
+
+    new_path_dict = {}
+    for path in paths:
+        _recurse(new_path_dict, Path(path).parts)
+    return new_path_dict
+
+
+# ==============================================================================
+# GRIDS & 2D GEOMETRY
+# ==============================================================================
+
+
+def print_grid(grid: List[List[Any]]) -> None:
+    """Affiche une grille 2D ligne par ligne dans la console."""
+    for r in grid:
+        for c in r:
+            print(c, end="")
+        print()
+    print()
+
+
+def as_grid(data: str, t: Callable = str) -> List[List[Any]]:
+    """Convertit une chaîne brute en grille 2D en appliquant le type t à chaque cellule."""
+    return [list(map(t, line)) for line in data.splitlines()]
+
+
+def get_grid(pos: Tuple[int, int], grid: List[List[Any]], default: Any = "?") -> Any:
+    """Récupère la valeur d'une cellule (y, x) ou une valeur par défaut si hors limites."""
     y, x = pos
     if 0 <= x < len(grid[0]) and 0 <= y < len(grid):
         return grid[y][x]
     return default
 
 
-def set_grid(pos, grid, value):
+def set_grid(pos: Tuple[int, int], grid: List[List[Any]], value: Any) -> bool:
+    """Modifie la valeur d'une cellule (y, x) si les coordonnées sont valides."""
     y, x = pos
     if 0 <= x < len(grid[0]) and 0 <= y < len(grid):
         grid[y][x] = value
@@ -130,7 +198,8 @@ def set_grid(pos, grid, value):
     return False
 
 
-def find_in_grid(e, grid):
+def find_in_grid(e: Any, grid: List[List[Any]]) -> Union[Tuple[int, int], bool]:
+    """Retourne les coordonnées (y, x) de la première occurrence de l'élément e, ou False."""
     for y, r in enumerate(grid):
         for x, c in enumerate(r):
             if c == e:
@@ -138,26 +207,55 @@ def find_in_grid(e, grid):
     return False
 
 
-def manhattan(p1, p2):
+def manhattan(p1: Tuple[int, int], p2: Tuple[int, int]) -> int:
+    """Calcule la distance de Manhattan entre deux points (y, x)."""
     return abs(p1[0] - p2[0]) + abs(p1[1] - p2[1])
 
 
-def mp_for_sum(func, params, n_proc=8):
-    def helper_mp_for_sum(func_and_params):
-        func, params = func_and_params
-        return sum(func(p) for p in params)
+def bfs(
+    grid: List[List[Any]],
+    start: Tuple[int, int],
+    walls: str = "#",
+    neighbours: List[Tuple[int, int]] = adj4,
+    objective=None,
+) -> Dict[Tuple[int, int], int]:
+    """Effectue un parcours en largeur (BFS) et retourne un dictionnaire {pos: distance}."""
+    queue = deque([(start, 0)])
+    visited = {start: 0}
 
-    n = len(params)
-    chunksize = (n + n_proc - 1) // n_proc
+    if type(objective) == Tuple and start == objective:
+        return visited
 
-    jobs = [(func, params[i : i + chunksize]) for i in range(0, n, chunksize)]
+    while queue:
+        (y, x), dist = queue.popleft()
 
-    with mp.Pool(n_proc) as pool:
-        results = pool.imap_unordered(helper_mp_for_sum, jobs, chunksize=1)
-        return sum(results)
+        for dy, dx in neighbours:
+            ny, nx = y + dy, x + dx
+            npos = (ny, nx)
+
+            cell_value = get_grid(npos, grid, default=walls[0])
+            if cell_value in walls:
+                continue
+
+            if npos in visited:
+                continue
+
+            if type(objective) == str and cell_value == objective:
+                return visited
+
+            visited[npos] = dist + 1
+            queue.append((npos, dist + 1))
+
+    return visited
 
 
-def berlekamp_massey(sequence):
+# ==============================================================================
+# MATH & SEQUENCES
+# ==============================================================================
+
+
+def berlekamp_massey(sequence: List[Union[int, float]]) -> List[Union[int, float]]:
+    """Trouve le polynôme générateur minimal pour une suite linéaire récurrente."""
     n = len(sequence)
     c = [1] + [0] * n
     b = [1] + [0] * n
@@ -182,7 +280,10 @@ def berlekamp_massey(sequence):
     return c[: L + 1]
 
 
-def next_term(relation, previous_terms):
+def next_term(
+    relation: List[Union[int, float]], previous_terms: List[Union[int, float]]
+) -> Union[int, float]:
+    """Calcule le terme suivant d'une suite en utilisant sa relation de récurrence."""
     next_value = 0
     for coef, term in zip(
         relation[1:], reversed(previous_terms[-(len(relation) - 1) :])
@@ -191,23 +292,20 @@ def next_term(relation, previous_terms):
     return next_value
 
 
-def get_divisors(n):
+def get_divisors(n: int) -> List[int]:
+    """Génère la liste de tous les diviseurs d'un entier n."""
     p_factors = sympy.factorint(n)
     ps = sorted(p_factors.keys())
     omega = len(ps)
-
     exponents = [p_factors[p] for p in ps]
 
     def rec_gen(n=0):
         if n == omega:
             yield 1
-
         else:
             current_prime = ps[n]
             current_exponent = exponents[n]
-
             pows = [current_prime**i for i in range(current_exponent + 1)]
-
             for q in rec_gen(n + 1):
                 for p in pows:
                     yield p * q
@@ -215,52 +313,9 @@ def get_divisors(n):
     return list(rec_gen())
 
 
-def str2dig(string: str) -> int:
-    """Give the digit corresponding to the start of the string -1 if not found:
-
-    Examples:
-        str2dig("ninesdfkdji") -> 9
-        str2dig("kninekqsdfj") -> -1
-    """
-    str2dig_dict: dict = {
-        "zero": 0,
-        "one": 1,
-        "two": 2,
-        "three": 3,
-        "four": 4,
-        "five": 5,
-        "six": 6,
-        "seven": 7,
-        "eight": 8,
-        "nine": 9,
-    }
-
-    for keys in str2dig_dict:
-        if string[: len(keys)] == keys:
-            return str2dig_dict[keys]
-    return -1
-
-
-def get_path_dict(paths: list[str | Path]) -> dict:
-    """Builds a tree like structure out of a list of paths"""
-
-    def _recurse(dic: dict, chain: tuple[str, ...] | list[str]):
-        if len(chain) == 0:
-            return
-        if len(chain) == 1:
-            dic[chain[0]] = None
-            return
-        key, *new_chain = chain
-        if key not in dic:
-            dic[key] = {}
-        _recurse(dic[key], new_chain)
-        return
-
-    new_path_dict = {}
-    for path in paths:
-        _recurse(new_path_dict, Path(path).parts)
-    return new_path_dict
-
+# ==============================================================================
+# MAIN / TESTS
+# ==============================================================================
 
 if __name__ == "__main__":
     print("Starting tests...")
@@ -268,12 +323,3 @@ if __name__ == "__main__":
     print(s_floats("76-87 678sd3.4"))
     print(s_nums("76-87 678sd3.4"))
     print(nums("76-87 678sd3.4"))
-    # print(re.findall(r'(?:\d+(?:\.\d*)?|\.\d+)', "76S-87 678sd3.4"))
-    # print(str2dig("nine"))
-    # print(str2dig("knines"))
-    #     data = """abcde
-    # fghij"""
-    #     print(as_grid(data))
-    # print(s_nums("asd3, 1, 23sl9s-23"))
-    # fib = berlekamp_massey([1, 1, 2, 3, 5, 8])
-    # print(get_divisors(random.randint(10, 100000)))
