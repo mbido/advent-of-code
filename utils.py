@@ -10,6 +10,7 @@ import copy
 import random
 import sys
 import sympy
+from sympy.ntheory.modular import crt
 import igraph as ig
 import networkx as nx
 from itertools import product, permutations
@@ -58,6 +59,11 @@ ALPHA = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
 # g.spanning_tree(weights=...)
 # g.degree(u, mod="...") -> mod in {"in", "out"}
 # g.topological_sorting(mode="...")
+# g.subcomponent(target, mode="in") -> donne tous les chemins qui vont vers (in) la target
+# g.is_dag() -> True s'il n'y a pas de cycles False sinon
+# g.is_connected(mode="weak") -> weak est pour ignorer les directions
+# g.decompose(mode="weak") -> pour récupere les ilots
+# g.is_tree(mode="out")
 
 
 def add_vertex_no_duplicate(g: ig.Graph, vertex_name: str) -> bool:
