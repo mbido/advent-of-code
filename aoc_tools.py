@@ -91,10 +91,10 @@ res = 0
 # node_patern = r'[a-z]{"{2}"}'
 # V = list(set(re.findall(node_patern, data)))
 # V_T = {"{V[i] : i for i in range(len(V))}"}
-# # Not directed
+# # Not weighted
 # edges = [(V_T[a], V_T[b]) for a, b in re.findall(r'(node_patern)\-(node_patern)', data)]
 # G = ig.Graph(edges=edges, directed=False)
-# # Directed
+# # Weighted
 # edges = [(V_T[a], V_T[b], int(c)) for a, b, c in re.findall(r'(node_patern)\-(node_patern)\-(\d+)', data)]
 # G = ig.Graph(edges=[(s,t) for s,t,_ in edges], directed=False, edge_attrs={'{"weight": [w for _,_,w in edges]}'})
 
