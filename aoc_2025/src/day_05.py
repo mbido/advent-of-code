@@ -1,6 +1,7 @@
 import os
 import sys
-sys.path.append(os.path.abspath(os.path.join(__file__, '..', '..', '..')))
+
+sys.path.append(os.path.abspath(os.path.join(__file__, "..", "..", "..")))
 import aoc_tools as aoct
 from utils import *
 
@@ -21,9 +22,55 @@ res = 0
 # # Directed
 # edges = [(V_T[a], V_T[b], int(c)) for a, b, c in re.findall(r'(node_patern)\-(node_patern)\-(\d+)', data)]
 # G = ig.Graph(edges=[(s,t) for s,t,_ in edges], directed=False, edge_attrs={"weight": [w for _,_,w in edges]})
+# data = """3-5
+# 10-14
+# 16-20
+# 12-18
 
-#data = as_grid(data)
-for l in data.split("\n"):
-    l = nums(l)
+# 1
+# 5
+# 8
+# 11
+# 17
+# 32"""
+# data = as_grid(data)
+a, b = data.split("\n\n")
+ranges = [nums(l) for l in a.split("\n")]
+for l in b.split("\n"):
+    l = nums(l)[0]
+    for c, d in ranges:
+        if c <= l <= d:
+            res += 1
+            break
+
+print(res)
+
+
+res = 0
+nr = ranges.copy()
+for i in range(len(ranges)):
+    c, d = nr[i]
+    for j in range(len(nr)):
+        if j == i:
+            continue
+        e, f = nr[j]
+        if e <= c <= d <= f:
+            c = 0
+            d = -1
+        if e <= c <= f:
+            c = f + 1
+        elif e <= d <= f:
+            d = e - 1
+
+    # if c <= d:
+    nr[i] = (c, d)
+
+# |-----|
+#  |--------|
+
+# print(nr)
+for c, d in nr:
+    # print(c, d, d - c + 1)
+    res += d - c + 1
 
 print(res)
