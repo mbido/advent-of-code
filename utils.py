@@ -213,9 +213,16 @@ def find_in_grid(e: Any, grid: List[List[Any]]) -> Union[Tuple[int, int], bool]:
     return False
 
 
-def manhattan(p1: Tuple[int, int], p2: Tuple[int, int]) -> int:
+def m_dist(p1: Tuple[int, int], p2: Tuple[int, int]) -> int:
     """Calcule la distance de Manhattan entre deux points (y, x)."""
     return abs(p1[0] - p2[0]) + abs(p1[1] - p2[1])
+
+
+def e_dist(A, B):
+    square = 0
+    for i in range(len(A)):
+        square += (A[i] - B[i]) ** 2
+    return math.sqrt(square)
 
 
 def bfs(

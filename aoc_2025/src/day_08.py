@@ -46,13 +46,6 @@ res = 0
 
 
 # data = as_grid(data)
-# def dist(c1, c2):
-#     return abs(c1[0] * c1[1] * c1[2] - c2[0] * c2[1] * c2[2]) ** (1 / 3)
-
-
-def dist(c1, c2):
-    return math.sqrt((c1[0] - c2[0]) ** 2 + (c1[1] - c2[1]) ** 2 + (c1[2] - c2[2]) ** 2)
-
 
 coords = []
 for l in data.split("\n"):
@@ -60,7 +53,7 @@ for l in data.split("\n"):
     coords.append((x, y, z))
 
 pairs = [(a, b) for i, a in enumerate(coords) for b in coords[i + 1 :]]
-pairs.sort(key=lambda x: dist(x[0], x[1]))
+pairs.sort(key=lambda x: e_dist(x[0], x[1]))
 # print(pairs)
 
 edges = [(str(a), str(b)) for a, b in pairs[:1000]]
@@ -71,7 +64,7 @@ l = sorted([len(e.vs) for e in g], reverse=True)
 print(l[0] * l[1] * l[2])
 
 
-edges = [(str(a), str(b), dist(a, b)) for a, b in pairs]
+edges = [(str(a), str(b), e_dist(a, b)) for a, b in pairs]
 G = ig.Graph.TupleList(edges, directed=False, edge_attrs="weight")
 
 mst = G.spanning_tree(weights="weight")
