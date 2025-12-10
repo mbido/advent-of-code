@@ -11,16 +11,18 @@ import random
 import sys
 import sympy
 from sympy.ntheory.modular import crt
+from shapely.geometry import Polygon, Point, box
 import igraph as ig
 import networkx as nx
-from itertools import product, permutations
+from itertools import product, permutations, combinations, pairwise
 from queue import PriorityQueue, Queue
-from bisect import *
+from bisect import bisect_left, bisect_right
 from functools import reduce, cmp_to_key
 import matplotlib.pyplot as plt
 from pathlib import Path
 from collections import deque
 from typing import List, Tuple, Dict, Any, Union, Callable, Optional, Generator
+import pulp  # LpProblem, LpMinimize, LpVariable, lpSum, value, LpStatus, PULP_CBC_CMD
 
 sys.setrecursionlimit(100000000)
 
@@ -182,6 +184,10 @@ def print_grid(grid: List[List[Any]]) -> None:
     print()
 
 
+def in_grid(pos: Tuple[int, int], grid: List[List[Any]]) -> bool:
+    return 0 <= pos[0] < len(grid) and 0 <= pos[1] < len(grid[0])
+
+
 def as_grid(data: str, t: Callable = str) -> List[List[Any]]:
     """Convertit une chaîne brute en grille 2D en appliquant le type t à chaque cellule."""
     return [list(map(t, line)) for line in data.splitlines()]
@@ -225,41 +231,86 @@ def e_dist(A, B):
     return math.sqrt(square)
 
 
-def bfs(
-    grid: List[List[Any]],
-    start: Tuple[int, int],
-    walls: str = "#",
-    neighbours: List[Tuple[int, int]] = adj4,
-    objective=None,
-) -> Dict[Tuple[int, int], int]:
-    """Effectue un parcours en largeur (BFS) et retourne un dictionnaire {pos: distance}."""
-    queue = deque([(start, 0)])
-    visited = {start: 0}
+def bfs(start, get_neighbors, is_goal):
+    """Example of get_neighbors
 
-    if type(objective) == Tuple and start == objective:
-        return visited
+    lambda pos : [
+            neighbor for di, dj in adj4 if in_grid(neighbor := (pos[0] + di, pos[1] + dj), grid)
+        ]
+    """
+
+    queue = deque([(start, 0)])  # Stocke (noeud_actuel, distance)
+    visited = {start}  # Set pour recherche en O(1)
 
     while queue:
-        (y, x), dist = queue.popleft()
+        current_node, dist = queue.popleft()
 
-        for dy, dx in neighbours:
-            ny, nx = y + dy, x + dx
-            npos = (ny, nx)
+        if is_goal(current_node):
+            return dist, current_node  # On renvoie la distance et l'état final
 
-            cell_value = get_grid(npos, grid, default=walls[0])
-            if cell_value in walls:
-                continue
+        for neighbor in get_neighbors(current_node):
+            if neighbor not in visited:
+                visited.add(neighbor)  # Marquer IMMÉDIATEMENT
+                queue.append((neighbor, dist + 1))
 
-            if npos in visited:
-                continue
+    return -1, None
 
-            if type(objective) == str and cell_value == objective:
-                return visited
 
-            visited[npos] = dist + 1
-            queue.append((npos, dist + 1))
+def bfs_path(start, get_neighbors, is_goal):
+    """Example of get_neighbors
+    lambda pos : [
+            neighbor for di, dj in adj4 if in_grid(neighbor := (pos[0] + di, pos[1] + dj), grid)
+        ]
+    """
 
-    return visited
+    queue = deque([start])
+    visited = {start: None}  # Le dictionnaire stocke {Enfant: Parent}
+
+    while queue:
+        current = queue.popleft()
+
+        if is_goal(current):
+            # Reconstruction du chemin à l'envers
+            path = []
+            while current is not None:
+                path.append(current)
+                current = visited[current]
+            return path[::-1]  # On inverse pour avoir Départ -> Fin
+
+        for neighbor in get_neighbors(current):
+            if neighbor not in visited:
+                visited[neighbor] = current  # On note d'où on vient
+                queue.append(neighbor)
+    return None
+
+
+def dfs(start, get_neighbors, is_goal):
+    """Example of get_neighbors
+
+    lambda pos : [
+            neighbor for di, dj in adj4 if in_grid(neighbor := (pos[0] + di, pos[1] + dj), grid)
+        ]
+    """
+
+    # Une simple liste Python agit comme une Pile (LIFO)
+    stack = [(start, 0)]
+    visited = {start}
+
+    while stack:
+        # Différence MAJEURE ici : pop() prend le dernier ajouté (LIFO)
+        current_node, dist = stack.pop()
+
+        if is_goal(current_node):
+            return dist, current_node
+
+        # Note : L'ordre des voisins influence quelle branche est explorée en premier.
+        # Souvent utile de faire get_neighbors(..)[::-1] si on veut un ordre précis.
+        for neighbor in get_neighbors(current_node):
+            if neighbor not in visited:
+                visited.add(neighbor)
+                stack.append((neighbor, dist + 1))
+
+    return -1, None
 
 
 # ==============================================================================
